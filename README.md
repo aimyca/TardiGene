@@ -38,7 +38,7 @@ pyenv pip install -r requirements.txt
 
 ## Dependancies
 
-Tardigene requires 2 external tools to run alignments :
+Tardigene requires 3 external tools to run alignments :
 
 - MAFFT (>=7.307)
 
@@ -50,4 +50,5 @@ sudo apt install mafft
 
 (need to configure MAFFT executable location)
 
+- Orthofinder (>=2.5.5), which needs to be installed from [this repo](https://github.com/davidemms/orthofinder#installing-orthofinder-on-linux).
 

@@ -1,0 +1,4 @@
+2026-11-23 15:08:29 : Started OrthoFinder version 2.5.5
+Command Line: ./OrthoFinder_source/orthofinder.py -f OrthoFinder_source/ExampleData/Mycoplasma_gallisepticum.faa
+
+WorkingDirectory_Base: /home/mimiwhine/Documents/M2/S1/GenieLog/TardiGene/OrthoFinder_source/ExampleData/Mycoplasma_gallisepticum.faaOrthoFinder/Results_Nov23/WorkingDirectory/
