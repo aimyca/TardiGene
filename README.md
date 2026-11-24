@@ -52,3 +52,12 @@ sudo apt install mafft
 
 - Orthofinder (>=2.5.5), which needs to be installed from [this repo](https://github.com/davidemms/orthofinder#installing-orthofinder-on-linux).
 
+You will need to add the binaries on your system's PATH by adding them into your bashrc :
+
+```bash
+# Inside ~/.bashrc
+PATH=$PATH:path/to/binary
+
+# For example with OrthoFinder 
+PATH=$PATH:OrthoFinder_source/orthofinder.py
+```

@@ -17,7 +17,9 @@ from Bio import AlignIO # need to make files for specific aligners
 # DB init 
 ################################################
 class GeneDatabase:
-    pass
+    """
+    Initializes database 
+    """
 
 
 
