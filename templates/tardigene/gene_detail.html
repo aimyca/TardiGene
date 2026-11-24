@@ -1,0 +1,145 @@
+
+{% extends "tardigene/base.html" %}
+
+{% block title %}Fiche du gène | TardiGen{% endblock %}
+{% block page_name %}Gènes et fonctions{% endblock %}
+
+{% block content %}
+
+<!-- RETOUR AU CATALOGUE -->
+<div class="backline">
+    <a href="{% url 'gene_list' %}" class="btn secondary">
+        ← Retour aux résultats
+    </a>
+    <span>Catalogue scientifique / Gènes / Fiche détaillée</span>
+</div>
+
+<!-- PRÉSENTATION DU GÈNE -->
+<section class="gene-hero">
+    <span class="badge">Fiche génétique</span>
+
+    <h1>{{ gene.gene_name }}</h1>
+
+    <p>
+        Informations génomiques disponibles pour ce gène.
+    </p>
+</section>
+
+<!-- INDICATEURS PRINCIPAUX -->
+<div class="metric-grid three">
+
+    <div class="metric">
+        <small>Identifiant du gène</small>
+        <strong>{{ gene.id }}</strong>
+    </div>
+
+    <div class="metric">
+        <small>Accession protéique</small>
+        <strong>
+            {{ gene.protein_accession|default:"Non renseignée" }}
+        </strong>
+    </div>
+
+    <div class="metric">
+        <small>Brin</small>
+        <strong>{{ gene.strand|default:"Non renseigné" }}</strong>
+    </div>
+
+</div>
+
+<!-- INFORMATIONS DÉTAILLÉES -->
+<div class="gene-columns">
+
+    <div>
+
+        <section class="card">
+            <h2>Identification du gène</h2>
+
+            <dl>
+                <dt>Nom du gène</dt>
+                <dd>{{ gene.gene_name }}</dd>
+
+                <dt>Identifiant</dt>
+                <dd>{{ gene.id }}</dd>
+
+                <dt>Position de début</dt>
+                <dd>{{ gene.start|default:"Non renseignée" }}</dd>
+
+                <dt>Position de fin</dt>
+                <dd>{{ gene.end|default:"Non renseignée" }}</dd>
+
+                <dt>Brin</dt>
+                <dd>{{ gene.strand|default:"Non renseigné" }}</dd>
+
+                <dt>Accession protéique</dt>
+                <dd>
+                    {{ gene.protein_accession|default:"Non renseignée" }}
+                </dd>
+            </dl>
+        </section>
+
+        <section class="card">
+            <h2>Séquence biologique</h2>
+
+            {% if gene.seq and gene.seq != "NA" %}
+                <pre class="sequence-box">{{ gene.seq }}</pre>
+            {% else %}
+                <div class="note">
+                    Aucune séquence disponible pour ce gène.
+                </div>
+            {% endif %}
+        </section>
+
+    </div>
+
+    <div>
+
+        <section class="card">
+            <h2>Origine biologique</h2>
+
+            <h3>Génome associé</h3>
+
+            <p>
+                {% if gene.genome_id %}
+                    {{ gene.genome_id.name }}
+                {% else %}
+                    Non renseigné
+                {% endif %}
+            </p>
+
+            <h3>Transcriptome associé</h3>
+
+            <p>
+                {% if gene.transcriptome_id %}
+                    {{ gene.transcriptome_id.name }}
+                {% else %}
+                    Non renseigné
+                {% endif %}
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Explorer TardiGen</h2>
+
+            <p>
+                Retrouvez d'autres gènes dans le catalogue
+                ou consultez les espèces disponibles.
+            </p>
+
+            <div class="actions">
+                <a href="{% url 'gene_list' %}" class="btn">
+                    Tous les gènes
+                </a>
+
+                <a href="{% url 'species_list' %}"
+                   class="btn secondary">
+                    Voir les espèces
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}

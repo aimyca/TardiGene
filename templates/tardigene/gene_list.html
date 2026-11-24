@@ -1,0 +1,105 @@
+
+{% extends "tardigene/base.html" %}
+
+{% block title %}Gènes et fonctions | TardiGen{% endblock %}
+{% block page_name %}Gènes et fonctions{% endblock %}
+
+{% block content %}
+
+<!-- EN-TÊTE -->
+<div class="intro">
+    <div>
+        <div class="eyebrow">
+            EXPLORATION GÉNÉTIQUE
+        </div>
+
+        <h1>Gènes et familles de gènes</h1>
+
+        <p>
+            Recherchez des gènes chez les tardigrades
+            et consultez leurs informations génomiques.
+        </p>
+    </div>
+</div>
+
+<!-- CATALOGUE DES GÈNES -->
+<section class="card">
+
+    <!-- RECHERCHE -->
+    <form method="get" class="gene-search-form">
+
+        <input
+            type="search"
+            name="q"
+            value="{{ q }}"
+            placeholder="Rechercher un gène ou un identifiant"
+        >
+
+        <button type="submit" class="btn">
+            Rechercher
+        </button>
+
+        <a href="{% url 'gene_list' %}" class="btn secondary">
+            Réinitialiser
+        </a>
+
+    </form>
+
+    <!-- NOMBRE DE RÉSULTATS -->
+    <p class="muted">
+        Résultats : {{ genes|length }} gène(s)
+    </p>
+
+    <!-- TABLEAU -->
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Identifiant</th>
+                    <th>Nom du gène</th>
+                    <th>Position début</th>
+                    <th>Position fin</th>
+                    <th>Brin</th>
+                    <th>Accession protéique</th>
+                    <th>Fiche</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for gene in genes %}
+                <tr>
+                    <td>{{ gene.id }}</td>
+
+                    <td>
+                        <strong>{{ gene.gene_name }}</strong>
+                    </td>
+
+                    <td>{{ gene.start|default:"—" }}</td>
+                    <td>{{ gene.end|default:"—" }}</td>
+                    <td>{{ gene.strand|default:"—" }}</td>
+
+                    <td>
+                        {{ gene.protein_accession|default:"—" }}
+                    </td>
+
+                    <td>
+                        <a href="{% url 'gene_detail' gene.id %}" class="link">
+                            Voir la fiche →
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7">
+                        Aucun gène trouvé dans le catalogue.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}

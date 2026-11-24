@@ -1,0 +1,112 @@
+
+{% extends "tardigene/base.html" %}
+
+{% block title %}Comparaison | TardiGen{% endblock %}
+{% block page_name %}Comparaison{% endblock %}
+
+{% block content %}
+
+<div class="intro">
+    <div>
+        <div class="eyebrow">GÉNOMIQUE COMPARATIVE</div>
+        <h1>Comparer les espèces</h1>
+        <p>
+            Sélectionnez les espèces de tardigrades pour comparer
+            les caractéristiques de leurs assemblages génomiques.
+        </p>
+    </div>
+</div>
+
+<!-- Données transmises par Django -->
+{{ species_data|json_script:"species-data" }}
+{{ assembly_data|json_script:"assembly-data" }}
+
+<!-- SÉLECTION DES ESPÈCES -->
+<section class="card">
+    <h2>1. Choisir les espèces à comparer</h2>
+
+    <div class="check-grid" id="species-selection">
+        {% for species in species_data %}
+            <label>
+                <input
+                    type="checkbox"
+                    value="{{ species.name }}"
+                    checked
+                >
+                <em>{{ species.name }}</em>
+            </label>
+        {% empty %}
+            <p>Aucune espèce enregistrée dans la base de données.</p>
+        {% endfor %}
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn"
+                id="compare-button">
+            Afficher la comparaison
+        </button>
+
+        <button type="button" class="btn secondary"
+                id="export-comparison">
+            Exporter en CSV
+        </button>
+    </div>
+
+    <p class="muted" id="selection-count"
+       aria-live="polite"></p>
+</section>
+
+<!-- RÉSULTATS -->
+<section class="card" id="comparison-results">
+    <h2>2. Comparaison des assemblages</h2>
+
+    <h3>N50 des assemblages (pb)</h3>
+    <div class="bars" id="assembly-bars"></div>
+
+    <h3>Tableau comparatif</h3>
+
+    <div class="table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Espèce</th>
+                    <th>Identifiant assemblage</th>
+                    <th>Classe</th>
+                    <th>Gènes</th>
+                    <th>Protéines</th>
+                    <th>GC (%)</th>
+                    <th>N50 (pb)</th>
+                    <th>BUSCO (%)</th>
+                </tr>
+            </thead>
+            <tbody id="comparison-table-body"></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ANALYSE DES ORTHOGROUPES -->
+<section class="card">
+
+    <h2>3. Analyse des orthogroupes — OrthoFinder</h2>
+
+    <p>
+        Explorez les familles de gènes homologues
+        et leur nombre de copies dans les espèces sélectionnées.
+    </p>
+
+    <h3>Répartition des orthogroupes par espèce</h3>
+
+    <div class="table-scroll">
+        <table id="orthogroups-table">
+            <thead id="orthogroups-table-head"></thead>
+            <tbody id="orthogroups-table-body"></tbody>
+        </table>
+    </div>
+
+    <h3>Heatmap · Copies par orthogroupe</h3>
+
+    <div class="heatmap" id="orthogroups-heatmap"></div>
+
+</section>
+
+{% endblock %}

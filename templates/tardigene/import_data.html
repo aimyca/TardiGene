@@ -1,0 +1,376 @@
+{% extends "tardigene/base.html" %}
+{% load static %}
+
+{% block title %}Importer des données | TardiGen{% endblock %}
+{% block page_name %}Importer{% endblock %}
+
+{% block content %}
+
+
+<!-- EN-TÊTE DE LA PAGE -->
+
+<div class="intro">
+    <div>
+        <div class="eyebrow">
+            CONTRIBUTIONS DE BIOLOGISTES
+        </div>
+
+        <h1>Importer des données</h1>
+
+        <p>
+            Proposez un génome, un protéome, une annotation
+            ou un tableau de gènes, en précisant sa provenance
+            scientifique.
+        </p>
+    </div>
+</div>
+
+
+<!-- ÉTAPES D'IMPORTATION -->
+
+<div class="steps">
+    <b>1 · Importation</b>
+    <span>2 · Vérification</span>
+    <span>3 · Validation</span>
+</div>
+
+
+<!-- FORMULAIRE PRINCIPAL -->
+
+<section class="card">
+
+    <h2>Nouvelle contribution</h2>
+
+    <form
+        id="import-form"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        {% csrf_token %}
+
+        <!-- TYPE DE FICHIER -->
+
+        <div class="form-grid">
+
+            <label for="data-type" class="wide">
+                Type de fichier *
+
+                <select id="data-type" name="data_type" required>
+                    <option value="protein">Protéines (FASTA)</option>
+                    <option value="genome">Génome (FASTA)</option>
+                    <option value="annotation">Annotations (GFF3 / GTF)</option>
+                    <option value="csv">Tableau de gènes (CSV)</option>
+                </select>
+            </label>
+
+        </div>
+
+        <!-- CHOIX DE L'ESPÈCE -->
+
+        <div class="species-mode-group">
+
+            <div class="species-mode-title">
+                Espèce concernée *
+            </div>
+
+            <div class="species-mode-options">
+
+                <label class="species-mode-option">
+                    <input
+                        type="radio"
+                        name="species_mode"
+                        value="existing"
+                        checked
+                    >
+                    <span>Espèce déjà existante dans TardiGen</span>
+                </label>
+
+                <label class="species-mode-option">
+                    <input
+                        type="radio"
+                        name="species_mode"
+                        value="new"
+                    >
+                    <span>Nouvelle espèce</span>
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ESPÈCE EXISTANTE -->
+
+        <div
+            id="existing-species-section"
+            class="form-grid"
+        >
+
+            <label for="species-name" class="wide">
+                Espèce
+
+                <select id="species-name" name="species" required>
+                    <option value="">Sélectionner une espèce</option>
+
+                    {% for species in species_list %}
+                        <option value="{{ species.scientific_name }}">
+                            {{ species.scientific_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+
+        </div>
+
+
+        <!-- NOUVELLE ESPÈCE -->
+
+        <div
+            id="new-species-section"
+            class="form-grid"
+            hidden
+        >
+
+            <label for="new-species-name">
+                Nom scientifique de l'espèce *
+
+                <input
+                    type="text"
+                    id="new-species-name"
+                    name="new_species_name"
+                    placeholder="Nom scientifique"
+                    data-check-url="{% url 'check_species_exists' %}"
+                    autocomplete="off"
+                    aria-describedby="species-check-message"
+                    disabled
+                >
+
+                <small
+                    id="species-check-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></small>
+
+            </label>
+
+            <label for="assembly-accession">
+                Numéro d'accession de l'assemblage
+                (facultatif)
+
+            {#data-check-url="{% url 'check_ncbi_accession' %}"#}
+
+            <input
+                type="text"
+                id="assembly-accession"
+                name="assembly_accession"
+                placeholder="Ex. GCA_001949185.1"
+                aria-describedby="ncbi-accession-message"
+                disabled
+            >
+
+            <small
+                id="ncbi-accession-message"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></small>
+
+            </label>
+
+            <label for="new-species-taxonomy">
+                Taxonomie *
+
+                <input
+                    type="text"
+                    id="new-species-taxonomy"
+                    name="new_species_taxonomy"
+                    placeholder="Classification taxonomique"
+                    disabled
+                >
+            </label>
+
+            <label for="new-species-description" class="wide">
+                Description de l'espèce (facultative)
+
+                <textarea
+                    id="new-species-description"
+                    name="new_species_description"
+                    placeholder="Description de l'espèce"
+                    rows="4"
+                    disabled
+                ></textarea>
+            </label>
+
+        </div>
+
+
+        <!-- IMPORTATION DU FICHIER -->
+
+        <div class="upload">
+
+            <h2>Importer un fichier</h2>
+
+            <label
+                class="dropzone"
+                for="biological-file"
+            >
+
+                <img
+                    src="{% static 'tardigene/images/upload.png' %}"
+                    alt=""
+                    class="upload-image"
+                >
+
+                <b>
+                    Choisissez votre fichier biologique
+                </b>
+
+                <span>
+                    Sélectionnez un fichier depuis
+                    votre ordinateur
+                </span>
+
+                <strong>
+                    Choisir un fichier
+                </strong>
+
+                <small id="selected-file-name">
+                    Aucun fichier sélectionné
+                </small>
+
+                <div class="accepted-formats">
+                    <span>Formats acceptés</span>
+                    <small id="accepted-formats-text"></small>
+                </div>
+
+                <input
+                    type="file"
+                    id="biological-file"
+                    name="biological_file"
+                    accept=".fasta,.fa,.faa,.fna,.gff3,.gff,.gtf,.csv"
+                    required
+                >
+
+            </label>
+
+        </div>
+
+
+        <!-- INFORMATIONS SCIENTIFIQUES -->
+
+        <h2>Informations scientifiques</h2>
+
+        <div class="form-grid">
+
+            <label for="data-origin">
+                Source des données *
+
+                <input
+                    type="text"
+                    id="data-origin"
+                    name="origin"
+                    placeholder="Laboratoire ou base de référence"
+                    required
+                >
+            </label>
+
+            <label for="data-doi">
+                Publication associée (facultatif)
+
+                <input
+                    type="text"
+                    id="data-doi"
+                    name="doi"
+                    placeholder="DOI ou PMID"
+                >
+            </label>
+
+            <label for="contributor-name">
+                Nom du contributeur
+
+                <input
+                    type="text"
+                    id="contributor-name"
+                    name="contributor_name"
+                    placeholder="Prénom et nom"
+                    required
+                >
+            </label>
+
+            <label for="contributor-email">
+                Adresse e-mail
+
+                <input
+                    type="email"
+                    id="contributor-email"
+                    name="contributor_email"
+                    placeholder="nom@institution.fr"
+                    required
+                >
+            </label>
+
+            <label
+                for="contributor-institution"
+                class="wide"
+            >
+                Établissement
+
+                <input
+                    type="text"
+                    id="contributor-institution"
+                    name="institution"
+                    placeholder="Laboratoire, université ou organisme"
+                >
+            </label>
+
+        </div>
+
+
+        <!-- DROITS DE PARTAGE -->
+
+        <label class="rights">
+
+            <input
+                type="checkbox"
+                id="sharing-rights"
+                name="sharing_rights"
+                required
+            >
+
+            Je déclare disposer des droits permettant
+            de partager ce fichier.
+
+        </label>
+
+
+        <!-- MESSAGES DE VALIDATION -->
+
+        <div
+            id="import-message"
+            class="message"
+            role="status"
+            aria-live="polite"
+            hidden
+        ></div>
+
+
+        <!-- BOUTON DE VALIDATION -->
+
+        <div class="actions">
+
+            <button
+                type="submit"
+                class="btn"
+            >
+                Vérifier mon fichier
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+{% endblock %}

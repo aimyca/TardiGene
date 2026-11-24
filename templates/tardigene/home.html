@@ -1,0 +1,127 @@
+
+{% extends "tardigene/base.html" %}
+{% load static %}
+
+{% block title %}Accueil | TardiGen{% endblock %}
+{% block page_name %}Accueil{% endblock %}
+
+{% block content %}
+
+<!-- BANDEAU PRINCIPAL -->
+<section class="hero">
+    <div class="eyebrow light">
+        PLATEFORME DE GÉNOMIQUE COMPARATIVE
+    </div>
+
+    <h1>Comprendre comment les tardigrades protègent leur ADN</h1>
+
+    <p>
+        Consultez les assemblages génomiques, explorez les gènes liés
+        à la tolérance au stress et confrontez les espèces aux
+        publications scientifiques.
+    </p>
+
+    <!-- RECHERCHE -->
+    <form class="global-search" method="get" action="">
+        <select name="scope" aria-label="Catégorie de recherche">
+            <option value="all">Tout</option>
+            <option value="species">Espèce</option>
+            <option value="gene">Gène</option>
+        </select>
+
+        <input
+            type="search"
+            name="q"
+            placeholder="Ex. Dsup, Hypsibius, radiations"
+            aria-label="Rechercher dans TardiGen"
+        >
+
+        <button type="submit" class="btn">
+            Rechercher
+        </button>
+    </form>
+</section>
+
+<!-- RUBRIQUES -->
+<h2 class="section-title">Explorer TardiGen</h2>
+
+
+<div class="feature-grid">
+
+    <!-- FICHES ESPÈCES -->
+    <a href="{% url 'species_list' %}" class="feature-card">
+
+        <img
+            src="{% static 'tardigene/images/fiche-espece.png' %}"
+            alt="Fiches espèces"
+            class="feature-icon"
+        >
+
+        <b>Fiches espèces</b>
+
+        <span>
+            Génomes, taxonomie, assemblages,
+            publications et sources.
+        </span>
+
+    </a>
+
+
+    <!-- GÈNES ET FONCTIONS -->
+    <a href="{% url 'gene_list' %}" class="feature-card">
+
+        <img
+            src="{% static 'tardigene/images/genes.png' %}"
+            alt="Gènes et fonctions"
+            class="feature-icon"
+        >
+
+        <b>Gènes et fonctions</b>
+
+        <span>
+            Explorez les gènes, leurs séquences
+            et leurs annotations disponibles.
+        </span>
+
+    </a>
+
+
+    <!-- COMPARAISON -->
+    <a href="{% url 'comparison' %}" class="feature-card">
+
+        <img
+            src="{% static 'tardigene/images/comparaison.png' %}"
+            alt="Comparer les espèces"
+            class="feature-icon"
+        >
+
+        <b>Comparer les espèces</b>
+
+        <span>
+            Comparez les caractéristiques
+            des assemblages disponibles.
+        </span>
+
+    </a>
+
+
+    <!-- IMPORTATION -->
+    <a href="{% url 'import_data' %}" class="feature-card">
+
+        <img
+            src="{% static 'tardigene/images/importer.png' %}"
+            alt="Importer des données"
+            class="feature-icon"
+        >
+
+        <b>Importer des données</b>
+
+        <span>
+            FASTA, GFF3/GTF et CSV.
+        </span>
+
+    </a>
+
+</div>
+
+{% endblock %}

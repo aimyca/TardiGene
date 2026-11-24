@@ -1,0 +1,89 @@
+
+{% extends "tardigene/base.html" %}
+
+{% block title %}Espèces | TardiGen{% endblock %}
+{% block page_name %}Espèces{% endblock %}
+
+{% block content %}
+
+<div class="intro">
+    <div>
+        <div class="eyebrow">CATALOGUE SCIENTIFIQUE</div>
+
+        <h1>Espèces de tardigrades</h1>
+
+        <p>
+            Explorez les espèces de tardigrades et consultez
+            leurs informations taxonomiques et génomiques.
+        </p>
+    </div>
+
+    <a href="{% url 'import_data' %}" class="btn">
+        + Ajouter une espèce
+    </a>
+</div>
+
+<div class="species-layout">
+
+    <!-- LISTE DES ESPÈCES -->
+    <section class="card species-list">
+
+        <h2>Rechercher une espèce</h2>
+
+        <form method="get">
+            <input
+                type="search"
+                name="q"
+                placeholder="Nom scientifique"
+                value="{{ q }}"
+            >
+        </form>
+
+        {% for species in species_list %}
+            <a href="?species={{ species.scientific_name|urlencode }}"
+               class="species-item">
+
+                <em>{{ species.scientific_name }}</em>
+                <small>{{ species.taxonomy }}</small>
+
+            </a>
+        {% empty %}
+            <p>Aucune espèce disponible.</p>
+        {% endfor %}
+
+    </section>
+
+    <!-- FICHE DE L'ESPÈCE -->
+    <section class="card species-detail">
+
+        {% if selected_species %}
+
+            <div class="eyebrow">
+                FICHE TAXONOMIQUE ET GÉNOMIQUE
+            </div>
+
+            <h1>
+                <em>{{ selected_species.scientific_name }}</em>
+            </h1>
+
+            <p>{{ selected_species.description }}</p>
+
+            <h2>Taxonomie</h2>
+            <p>{{ selected_species.taxonomy }}</p>
+
+            <h2>Références scientifiques</h2>
+            <p>{{ selected_species.references }}</p>
+
+            <a href="{% url 'comparison' %}" class="btn">
+                Comparer avec les autres espèces
+            </a>
+
+        {% else %}
+            <p>Sélectionnez une espèce pour consulter sa fiche.</p>
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1582 @@
+/* TARDIGEN - FEUILLE DE STYLE PRINCIPALE */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+/* ----------------------------------------------------------
+   01. POLICE, COULEURS ET STYLES GENERAUX
+   ---------------------------------------------------------- */
+
+:root {
+    font-family: Inter, Arial, sans-serif;
+    color: #29253f;
+    background: #f7f7fb;
+    font-size: 14px;
+    line-height: 1.5;
+    --purple: #6b47be;
+    --dark: #281d43;
+    --line: #e2ddec;
+    --muted: #706c7f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f7f7fb;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 32px;
+    line-height: 1.15;
+    margin: 6px 0 10px;
+    letter-spacing: -1.2px;
+}
+
+h2 {
+    font-size: 18px;
+    margin: 0 0 14px;
+}
+
+h3 {
+    font-size: 15px;
+    margin: 18px 0 9px;
+}
+
+p {
+    margin: 6px 0 14px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.eyebrow {
+    color: var(--purple);
+    letter-spacing: 1.5px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.eyebrow.light {
+    color: #d6c8f3;
+}
+
+.btn {
+    border: 1px solid var(--purple);
+    background: var(--purple);
+    color: #fff;
+    padding: 11px 16px;
+    border-radius: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background: #5635a2;
+}
+
+.btn.secondary {
+    background: #fff;
+    color: #5d39a9;
+    border-color: #d9d0e9;
+}
+
+.btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 16px rgba(42,29,67,.025);
+}
+
+.pill,.pills span {
+    display: inline-block;
+    border-radius: 99px;
+    padding: 4px 10px;
+    background: #f0edf4;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.pill.purple,.pills span {
+    background: #f0e9fd;
+    color: #5b38a3;
+}
+
+.pill.ok,.pills.green span {
+    background: #dff4ec;
+    color: #177457;
+}
+
+
+/* ----------------------------------------------------------
+   02. CHAMPS DE FORMULAIRE ET MENUS DEROULANTS
+   ---------------------------------------------------------- */
+input:not([type="checkbox"]):not([type="file"]),
+select,
+textarea {
+    width: 100%;
+    border: 1px solid #dcd5e9;
+    border-radius: 9px;
+    background: #fff;
+    padding: 11px 12px;
+    color: #29253f;
+    outline-color: #9777d3;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+select,
+select option,
+.form-grid label select,
+#import-form select,
+#import-form select option {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+input::placeholder,
+textarea::placeholder {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #77717f;
+    opacity: 1;
+}
+
+#import-form #species-name:invalid {
+    color: #77717f;
+}
+
+#import-form #species-name option {
+    color: #29253f;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 12px;
+}
+
+th {
+    background: #f5f1fa;
+    text-align: left;
+    padding: 11px 12px;
+    font-size: 10px;
+}
+
+td {
+    border-bottom: 1px solid #e8e3ed;
+    padding: 12px;
+    vertical-align: top;
+}
+
+td small,th small {
+    display: block;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.link,a {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #653db1;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+details {
+    border: 1px solid #e0d4f4;
+    background: #f8f4ff;
+    border-radius: 10px;
+    margin-top: 18px;
+    padding: 14px 18px;
+}
+
+summary {
+    color: #5d39a9;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    accent-color: var(--purple);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+.message.error {
+    background: #fff0f0;
+    color: #a42c32;
+}
+
+.message.success {
+    background: #e4f6ef;
+    color: #177457;
+}
+
+.table-scroll {
+    overflow: auto;
+}
+
+a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+a.btn:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+a.btn.secondary {
+    background: #fff;
+    color: #5d39a9;
+    border: 1px solid #d9d0e9;
+}
+
+
+/* ----------------------------------------------------------
+   03. STRUCTURE PRINCIPALE, LOGO ET NAVIGATION
+   ---------------------------------------------------------- */
+
+.app {
+    min-height: 100vh;
+    display: flex;
+}
+
+aside {
+    width: 242px;
+    min-height: 100vh;
+    background: var(--dark);
+    color: #ddd7ec;
+    padding: 34px 15px 24px;
+    position: fixed;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.brand {
+    background: none;
+    border: 0;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    text-align: left;
+    padding: 0 12px;
+    letter-spacing: -1.5px;
+}
+
+
+.tagline {
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 0 12px 34px;
+    color: #bcb2d2;
+}
+
+aside nav {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+aside nav button {
+    border: 0;
+    background: transparent;
+    color: #d9d3e5;
+    border-radius: 11px;
+    padding: 14px 16px;
+    text-align: left;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+aside nav button i {
+    font-size: 19px;
+    font-style: normal;
+    width: 20px;
+    text-align: center;
+}
+
+aside nav button.active {
+    color: #fff;
+    background: #6b47be;
+}
+
+.aside-foot {
+    margin-top: auto;
+    border-top: 1px solid #51446d;
+    padding: 16px 14px 0;
+    font-size: 10px;
+    line-height: 1.8;
+    color: #b9afcb;
+}
+
+.shell {
+    margin-left: 242px;
+    width: calc(100% - 242px);
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 70px;
+    padding: 0 30px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #797486;
+}
+
+.topbar .btn {
+    padding: 11px 17px;
+}
+
+main {
+    padding: 30px 32px 80px;
+    max-width: 1220px;
+    margin: auto;
+}
+
+.intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 30px;
+}
+
+.intro p {
+    color: var(--muted);
+    max-width: 940px;
+}
+
+aside nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 16px;
+    border-radius: 11px;
+    color: #d9d3e5;
+    text-decoration: none;
+    font-weight: 400;
+    background: transparent;
+    transition: background-color 0.2s ease;
+}
+
+aside nav a:hover, aside nav a.active {
+    color: #fff;
+    background: var(--purple);
+}
+
+aside nav a:focus-visible {
+    outline: 2px solid #c8b5f2;
+    outline-offset: 2px;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.brand-logo {
+    width: 160px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.brand a {
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* LOGO ET NOM DE L'APPLICATION */
+
+.brand {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    text-decoration: none;
+}
+
+.brand:hover {
+    text-decoration: none;
+}
+
+.brand-text {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.2;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.brand-text span {
+    color: #a98ae9;
+}
+
+.tagline {
+    margin-top: 8px;
+    padding: 0 12px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #bcb2d2;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   04. ACCUEIL : BANDEAU, RECHERCHE ET CARTES
+   ---------------------------------------------------------- */
+
+.hero {
+    background: linear-gradient(115deg,#2e234c,#734dbd 68%,#8b64d1);
+    color: #fff;
+    padding: 35px 38px;
+    border-radius: 19px;
+}
+
+.hero h1 {
+    font-size: 36px;
+}
+
+.hero p {
+    color: #f3eefc;
+}
+
+.global-search {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 6px;
+    margin-top: 18px;
+}
+
+.global-search select,.global-search input {
+    border: 0;
+    outline: 0;
+    padding: 10px 14px;
+    background: #fff;
+    color: #29253f;
+}
+
+.search-results {
+    background: #fff;
+    border-radius: 9px;
+    margin-top: 8px;
+    padding: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.search-results button {
+    border: 0;
+    color: var(--purple);
+    background: #f5f0fd;
+    padding: 7px 10px;
+    border-radius: 7px;
+}
+
+.section-title {
+    margin: 25px 0 15px;
+    font-size: 20px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 14px;
+}
+
+.feature-card {
+    text-align: left;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    color: #29253f;
+    text-decoration: none;
+    font-weight: 400;
+    align-items: flex-start;
+}
+
+.feature-card:hover {
+    border-color: #a98ae9;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.feature-card i {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: #f0eafd;
+    color: var(--purple);
+    border-radius: 12px;
+    font-style: normal;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature-card span {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+}
+
+.explore-card {
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feature-card b {
+    color: #29253f;
+    font-weight: 700;
+}
+
+.feature-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.feature-card .feature-icon {
+    transition: transform 0.2s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.08);
+}
+
+
+/* ----------------------------------------------------------
+   05. CATALOGUE DES ESPECES
+   ---------------------------------------------------------- */
+
+.species-layout {
+    display: grid;
+    grid-template-columns: 270px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.species-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.species-list button {
+    border: 1px solid #e2dced;
+    padding: 13px;
+    border-radius: 10px;
+    background: #fff;
+    text-align: left;
+    color: #493c70;
+}
+
+.species-list button.selected {
+    background: #f4effc;
+    border-color: #ae8cec;
+}
+
+.species-list small,.species-list em {
+    display: block;
+}
+
+.species-detail .detail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.species-detail h2 {
+    margin-top: 18px;
+}
+
+.metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.metric {
+    border: 1px solid #e0daeb;
+    background: #faf9fd;
+    padding: 15px;
+    border-radius: 11px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.metric small,.metric span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.metric strong {
+    font-size: 16px;
+}
+
+.species-list form {
+    width: 100%;
+}
+
+.species-item {
+    display: block;
+    padding: 13px;
+    border: 1px solid #e2dced;
+    border-radius: 10px;
+    color: #493c70;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.species-item:hover {
+    background: #f4effc;
+    border-color: #ae8cec;
+}
+
+.species-item em, .species-item small {
+    display: block;
+}
+
+.species-item small {
+    margin-top: 5px;
+    color: #706c7f;
+}
+
+
+/* ----------------------------------------------------------
+   06. GENES, FONCTIONS ET SEQUENCES
+   ---------------------------------------------------------- */
+
+.filters {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1.2fr auto;
+    gap: 10px;
+}
+
+.backline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 14px;
+}
+
+.gene-hero {
+    background: linear-gradient(115deg,#3c276c,#744ebd);
+    color: #fff;
+    border-radius: 16px;
+    padding: 28px 30px;
+    margin-bottom: 16px;
+}
+
+.gene-hero h1 {
+    font-size: 32px;
+}
+
+.badge {
+    background: white;
+    color: #6240a7;
+    padding: 5px 10px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.metric-grid.three {
+    grid-template-columns: repeat(3,1fr);
+}
+
+.gene-columns {
+    display: grid;
+    grid-template-columns: 1.65fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.gene-columns .card {
+    margin-bottom: 16px;
+}
+
+.note {
+    background: #f3edff;
+    border-left: 3px solid #8e62e5;
+    padding: 12px;
+    border-radius: 7px;
+    margin: 12px 0;
+    font-size: 12px;
+}
+
+dl {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    margin: 0;
+}
+
+dt,dd {
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #e8e3ed;
+}
+
+dt {
+    font-weight: 700;
+    font-size: 10px;
+    background: #faf9fd;
+}
+
+.gene-search-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.gene-search-form input {
+    flex: 1;
+    min-width: 0;
+}
+
+.gene-search-form .btn {
+    text-decoration: none;
+}
+
+.gene-hero h1, .metric strong, .sequence-box {
+    overflow-wrap: anywhere;
+}
+
+.sequence-box {
+    padding: 18px;
+    background: #f8f6fc;
+    border: 1px solid #e2ddec;
+    border-radius: 10px;
+    color: #29253f;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    max-height: 350px;
+    overflow: auto;
+}
+
+
+/* ----------------------------------------------------------
+   07. COMPARAISON DES ESPECES
+   ---------------------------------------------------------- */
+
+.check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.check-grid label,.ref-box label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid #e3ddec;
+    border-radius: 9px;
+    padding: 10px;
+}
+
+.bars {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin: 14px 0 20px;
+}
+
+.bars div {
+    display: grid;
+    grid-template-columns: 180px 1fr 80px;
+    gap: 12px;
+    align-items: center;
+    font-size: 11px;
+}
+
+.bars span {
+    height: 13px;
+    background: #eee8fa;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bars i {
+    display: block;
+    height: 100%;
+    min-width: 5px;
+    border-radius: 20px;
+    background: linear-gradient(90deg,#6c48bf,#a88be2);
+}
+
+.heatmap {
+    margin: 10px 0;
+}
+
+.heat-row {
+    display: grid;
+    grid-template-columns: 150px repeat(4,1fr);
+    gap: 12px;
+    padding: 8px;
+    border-bottom: 1px solid #eee9f3;
+    align-items: center;
+}
+
+.heat-row button {
+    border: 0;
+    padding: 10px;
+    border-radius: 7px;
+    color: #2d2248;
+    background: rgba(111,70,190,var(--heat));
+    font-weight: 700;
+}
+
+#species-selection label {
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#species-selection label:hover {
+    background: #f5f0fd;
+    border-color: #a98ae9;
+}
+
+#species-selection input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+#comparison-results {
+    scroll-margin-top: 24px;
+}
+
+#assembly-bars > div {
+    grid-template-columns: minmax(160px, 220px) 1fr 90px;
+}
+
+#assembly-bars em {
+    overflow-wrap: anywhere;
+}
+
+#comparison-table-body td, #comparison-functions-body td {
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------
+   08. ANALYSE DE SEQUENCES : BLASTN ET MAFFT
+   ---------------------------------------------------------- */
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.blast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.ref-box {
+    border: 1px dashed #ae8cec;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.ref-box label {
+    border-width: 0 0 1px;
+    border-radius: 0;
+}
+
+.alignment {
+    border: 1px dashed #b99be9;
+    background: #fcfaff;
+    border-radius: 10px;
+    padding: 14px;
+    margin: 14px 0;
+    overflow-x: auto;
+}
+
+.alignment > div {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    border-bottom: 1px solid #ebe5f2;
+    padding: 6px 0;
+    align-items: center;
+}
+
+.alignment span {
+    display: flex;
+    white-space: nowrap;
+}
+
+.alignment i {
+    font: normal 11px monospace;
+    width: 19px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    margin-right: 1px;
+    border-radius: 3px;
+}
+
+.alignment i.same {
+    background: #dff3e9;
+    color: #246e58;
+}
+
+.alignment i.diff {
+    background: #ffe5bd;
+    color: #87530c;
+}
+
+.alignment i.gap {
+    background: #ecf7f2;
+    color: #7aa390;
+}
+
+
+/* ----------------------------------------------------------
+   09. IMPORTATION DES DONNEES
+   ---------------------------------------------------------- */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.steps > * {
+    text-align: center;
+    border: 1px solid #ded7e9;
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.steps b {
+    border-color: #a784e4;
+    background: #f3edfd;
+    color: #6240aa;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.form-grid label {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.form-grid label input,.form-grid label select,.form-grid label textarea {
+    margin-top: 6px;
+}
+
+.form-grid .wide {
+    grid-column: 1/-1;
+}
+
+.upload {
+    background: #fbf9fe;
+    border: 1px solid #dfd2f5;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.format-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.format-pills span {
+    border: 1px solid #d8cbea;
+    background: #fff;
+    padding: 5px 9px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.dropzone {
+    min-height: 260px;
+    border: 2px dashed #a984e5;
+    background: #fff;
+    border-radius: 14px;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 35px;
+    color: #6b47be;
+    cursor: pointer;
+}
+
+.dropzone b {
+    color: #29253f;
+    font-size: 18px;
+}
+
+.dropzone span,.dropzone small {
+    color: #645b7c;
+    font-size: 12px;
+}
+
+.dropzone strong {
+    background: #6b47be;
+    color: #fff;
+    font-size: 11px;
+    padding: 10px 16px;
+    border-radius: 8px;
+}
+
+.dropzone input {
+    display: none;
+}
+
+.rights {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#existing-species-section[hidden], #new-species-section[hidden] {
+    display: none !important;
+}
+
+.upload-image {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+/* ----------------------------------------------------------
+   STYLE DES CHAMPS DU FORMULAIRE
+   ---------------------------------------------------------- */
+
+#import-form input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
+#import-form select,
+#import-form textarea {
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #29253f;
+}
+
+#import-form input::placeholder,
+#import-form textarea::placeholder {
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #77717f;
+    opacity: 1;
+}
+
+#import-form select option {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+#import-form .form-grid label,
+#import-form .species-mode-title {
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#new-species-name::placeholder {
+    font-style: italic;
+}
+
+/* ----------------------------------------------------------
+   CHOIX ENTRE ESPECE EXISTANTE ET NOUVELLE ESPECE
+   ---------------------------------------------------------- */
+
+.species-mode-group {
+    margin: 16px 0;
+}
+
+.species-mode-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.species-mode-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.species-mode-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #dcd5e9;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.species-mode-option input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: var(--purple);
+    flex-shrink: 0;
+}
+
+.species-mode-option:has(input:checked) {
+    border-color: #a784e4;
+    background: #faf7ff;
+}
+
+.species-mode-option:hover {
+    border-color: #a784e4;
+}
+
+#existing-species-section[hidden],
+#new-species-section[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 620px) {
+    .species-mode-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----------------------------------------------------------
+   MASQUAGE DES MESSAGES
+   ---------------------------------------------------------- */
+
+#import-message[hidden],
+#species-check-message[hidden],
+#ncbi-accession-message[hidden] {
+    display: none;
+}
+
+/* ----------------------------------------------------------
+   10. HISTORIQUE ET STATUTS
+   ---------------------------------------------------------- */
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.status.pending {
+    background: #fff0cf;
+    color: #8b5d0b;
+}
+
+.status.valid {
+    background: #def3eb;
+    color: #177457;
+}
+
+.status.bad {
+    background: #ffebeb;
+    color: #b12b32;
+}
+
+.login-card {
+    max-width: 520px;
+    text-align: center;
+    margin: 80px auto;
+    padding: 40px;
+}
+
+
+/* ----------------------------------------------------------
+   11. AIDE ET DOCUMENTATION
+   ---------------------------------------------------------- */
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.guide-grid > div {
+    border: 1px solid #e4deec;
+    border-radius: 13px;
+    padding: 17px;
+}
+
+.guide-grid p {
+    color: #4f4a5e;
+    font-size: 12px;
+    min-height: 38px;
+}
+
+.help-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+
+/* ----------------------------------------------------------
+   12. RESPONSIVE : TABLETTES ET MOBILES
+   ---------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+    aside {
+        width: 78px;
+        padding: 25px 8px;
+    }
+
+    .brand {
+        font-size: 0;
+    }
+
+    .brand:first-letter {
+        font-size: 24px;
+    }
+
+    .tagline,.aside-foot,aside nav button:not(.active) {
+        font-size: 0;
+    }
+
+    aside nav button {
+        justify-content: center;
+        padding: 14px 8px;
+    }
+
+    aside nav button.active {
+        font-size: 0;
+    }
+
+    aside nav button i {
+        font-size: 20px;
+    }
+
+    .shell {
+        margin-left: 78px;
+        width: calc(100% - 78px);
+    }
+
+    main {
+        padding: 24px 18px 60px;
+    }
+
+    .feature-grid,.metric-grid,.steps {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .species-layout,.gene-columns,.blast-grid,.help-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .species-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .species-list > b,.species-list > input {
+        grid-column: 1/-1;
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 900px) and (min-width: 621px) {
+
+    aside nav a {
+        justify-content: center;
+        padding: 14px 8px;
+        font-size: 0;
+        gap: 0;
+    }
+
+    aside nav a .nav-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+}
+
+
+@media (max-width: 620px) {
+
+    aside {
+        position: static;
+        width: 100%;
+        min-height: 0;
+        padding: 12px;
+    }
+
+    .app {
+        display: block;
+    }
+
+    .shell {
+        margin: 0;
+        width: 100%;
+    }
+
+    .aside-foot,.tagline {
+        display: none;
+    }
+
+    aside nav {
+        flex-direction: row;
+        overflow: auto;
+    }
+
+    aside nav button,aside nav button.active {
+        font-size: 0;
+        min-width: 48px;
+    }
+
+    .topbar {
+        height: 58px;
+        padding: 0 14px;
+    }
+
+    main {
+        padding: 18px 12px 50px;
+    }
+
+    h1,.hero h1 {
+        font-size: 27px;
+    }
+
+    .hero {
+        padding: 24px 18px;
+    }
+
+    .global-search {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-grid,.metric-grid,.metric-grid.three,.check-grid,.guide-grid,.form-grid,.steps,.species-list {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid .wide,.species-list > b,.species-list > input {
+        grid-column: auto;
+    }
+
+    .explore-card,.intro,.detail-head {
+        align-items: flex-start !important;
+        flex-direction: column;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .bars div {
+        grid-template-columns: 115px 1fr 65px;
+    }
+
+    .heat-row {
+        grid-template-columns: 110px repeat(2,1fr);
+    }
+
+    .alignment > div {
+        grid-template-columns: 130px 1fr;
+    }
+
+    aside nav a, aside nav a.active {
+        min-width: 48px;
+        justify-content: center;
+        padding: 12px;
+        font-size: 0;
+        gap: 0;
+    }
+
+    aside nav a .nav-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .gene-search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .gene-columns {
+        grid-template-columns: 1fr;
+    }
+
+    dl {
+        grid-template-columns: 1fr;
+    }
+
+    #assembly-bars > div {
+        grid-template-columns: 105px 1fr 65px;
+        gap: 8px;
+    }
+
+}
+
+
+/* ----------------------------------------------------------
+   CHOIX ENTRE ESPECE EXISTANTE ET NOUVELLE ESPECE
+   ---------------------------------------------------------- */
+
+.species-mode-group {
+    margin: 16px 0;
+}
+
+.species-mode-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.species-mode-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.species-mode-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid #dcd5e9;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.species-mode-option input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: var(--purple);
+    flex-shrink: 0;
+}
+
+.species-mode-option:has(input:checked) {
+    border-color: #a784e4;
+    background: #faf7ff;
+}
+
+.species-mode-option:hover {
+    border-color: #a784e4;
+}
+
+#existing-species-section[hidden],
+#new-species-section[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 620px) {
+    .species-mode-options {
+        grid-template-columns: 1fr;
+    }
+}
+

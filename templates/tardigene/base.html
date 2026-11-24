@@ -1,0 +1,157 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}TardiGen{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'tardigene/css/style.css' %}">
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- MENU LATÉRAL -->
+        <aside>
+
+            <!-- Logo -->
+            <div class="brand-block">
+                <a href="/" class="brand">
+                    <img
+                        src="{% static 'tardigene/images/logo.png' %}"
+                        alt=""
+                        class="brand-logo"
+                    >
+
+                    <span class="brand-text">
+                        Tardi<span>Gen</span>
+                    </span>
+                </a>
+
+                <div class="tagline">
+                    EXPLORATION GÉNOMIQUE
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav aria-label="Navigation principale">
+
+                <a href="{% url 'home' %}"
+                   class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/accueil.png' %}"
+                         alt="" class="nav-icon">
+                    Accueil
+                </a>
+
+                <a href="{% url 'species_list' %}"
+                   class="{% if request.resolver_match.url_name == 'species_list' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'species_list' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/especes.png' %}"
+                         alt="" class="nav-icon">
+                    Espèces
+                </a>
+
+                <a href="{% url 'gene_list' %}"
+                   class="{% if request.resolver_match.url_name == 'gene_list' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'gene_list' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/genes.png' %}"
+                         alt="" class="nav-icon">
+                    Gènes et fonctions
+                </a>
+
+                <a href="{% url 'comparison' %}"
+                   class="{% if request.resolver_match.url_name == 'comparison' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'comparison' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/comparaison.png' %}"
+                         alt="" class="nav-icon">
+                    Comparaison
+                </a>
+
+                <a href="{% url 'sequence_analysis' %}"
+                   class="{% if request.resolver_match.url_name == 'sequence_analysis' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'sequence_analysis' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/analyse.png' %}"
+                         alt="" class="nav-icon">
+                    Analyse de séquences
+                </a>
+
+                <a href="{% url 'import_data' %}"
+                   class="{% if request.resolver_match.url_name == 'import_data' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'import_data' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/importer.png' %}"
+                         alt="" class="nav-icon">
+                    Importer
+                </a>
+
+                <a href="{% url 'history' %}"
+                   class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'history' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/historique.png' %}"
+                         alt="" class="nav-icon">
+                    Historique
+                </a>
+
+                <a href="{% url 'help' %}"
+                   class="{% if request.resolver_match.url_name == 'help' %}active{% endif %}"
+                   {% if request.resolver_match.url_name == 'help' %}aria-current="page"{% endif %}>
+                    <img src="{% static 'tardigene/images/aide.png' %}"
+                         alt="" class="nav-icon">
+                    Aide
+                </a>
+
+            </nav>
+
+            <!-- Bas du menu -->
+            <div class="aside-foot">
+                TardiGen · Explorer les génomes<br>
+                des tardigrades<br>
+                Catalogue documenté · Sources<br>
+                scientifiques accessibles
+            </div>
+
+        </aside>
+
+        <!-- CONTENU PRINCIPAL -->
+        <div class="shell">
+
+            <!-- Barre supérieure -->
+            <header class="topbar">
+
+                <span>
+                    TardiGen /
+                    <b>{% block page_name %}Accueil{% endblock %}</b>
+                </span>
+
+                {% if user.is_authenticated %}
+                    <span>{{ user.username }}</span>
+                {% else %}
+                    <button class="btn" type="button">
+                        Se connecter
+                    </button>
+                {% endif %}
+
+            </header>
+
+            <!-- Contenu spécifique à chaque page -->
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'tardigene/js/main.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>
