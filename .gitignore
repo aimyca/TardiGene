@@ -1,3 +1,12 @@
 OrthoFinder_source/
 Database/
+
+# Environnements virtuels Python
 .venv/
+.venv_backup/
+venv_tardigene/
+venv_tardigene_py312/
+
+# Fichiers temporaires Python
+__pycache__/
+*.pyc
