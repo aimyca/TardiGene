@@ -7,7 +7,7 @@ def create_blast_db(genome_path, db_prefix):
     db_prefix = Path(db_prefix)
     # Vérifie si le génome existe
     if not genome_path.is_file():
-        raise FileNotFoundError(f"Genome file not found: {genome_path}")
+        raise FileNotFoundError(f"Fichier génomique introuvable: {genome_path}")
     # Crée le dossier de sortie si nécessaire
     db_prefix.parent.mkdir(parents=True, exist_ok=True)
     # Prépare la commande makeblastdb
@@ -37,5 +37,5 @@ def validate_blast_db(db_prefix):
         return True
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
-            f"BLAST database validation failed: {e.stderr}"
+            f"Échec de la validation de la base BLAST: {e.stderr}"
         ) from e
