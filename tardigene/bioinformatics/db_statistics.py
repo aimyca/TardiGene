@@ -10,6 +10,7 @@ ENSEMBL_API = "https://rest.ensembl.org"
 HEADERS = {"Accept": "application/json", "User-Agent": "TardiGene/1.0"}
 TIMEOUT = (30, 120)
  
+ 
 
 def _empty_statistics():
     return {
@@ -18,7 +19,7 @@ def _empty_statistics():
         "gc": None, "genes": None, "busco": None,
     }
  
-#renvoie premiere cle 
+ 
 def _pick(data, *keys):
     if not isinstance(data, dict):
         return None
@@ -37,18 +38,16 @@ def _to_int(value):
         return None
  
  
-def _to_float(value):
-    if value in (None, ""):
+def to_number(value):
+    if value in (None, "", "NA"):
         return None
     try:
         return float(str(value).replace(",", "").replace("%", ""))
     except ValueError:
         return None
  
-#calcul n50 pour Ensembl (car donne les longueurs) 
+ 
 def compute_n50(lengths):
-    if not lengths:
-        return None
     lengths = sorted(lengths, reverse=True)
     half_total = sum(lengths) / 2
     cumulative = 0
@@ -62,8 +61,9 @@ def compute_n50(lengths):
 
 # NCBI
 
-#extraction des stats
+ 
 def parse_ncbi_report(data):
+    """Extrait les statistiques d'une réponse NCBI Datasets (dataset_report)."""
     reports = data.get("reports") or []
     if not reports:
         raise ValueError("Accession introuvable dans NCBI.")
@@ -82,11 +82,11 @@ def parse_ncbi_report(data):
     result["n_sequences"] = _to_int(_pick(stats, "number_of_scaffolds", "numberOfScaffolds",
                                           "number_of_contigs", "numberOfContigs"))
     result["n50"] = _to_int(_pick(stats, "scaffold_n50", "scaffoldN50", "contig_n50", "contigN50"))
-    result["gc"] = _to_float(_pick(stats, "gc_percent", "gcPercent"))
+    result["gc"] = to_number(_pick(stats, "gc_percent", "gcPercent"))
     # Gènes codant des protéines (seulement si l'assemblage est annoté par NCBI)
     result["genes"] = _to_int(_pick(gene_counts, "protein_coding", "proteinCoding"))
     # BUSCO : NCBI donne une fraction (0.95) -> pourcentage (95.0)
-    complete = _to_float(_pick(busco, "complete"))
+    complete = to_number(_pick(busco, "complete"))
     result["busco"] = round(complete * 100, 1) if complete is not None and complete <= 1 else complete
     return result
  
@@ -97,22 +97,20 @@ def fetch_ncbi_statistics(accession):
     response.raise_for_status()
     return parse_ncbi_report(response.json())
  
-
-
+ 
 
 # NGDC-CNCB
 
-#lecture stats 
+ 
 def parse_ngdc_page(html):
     text = re.sub(r"<[^>]+>", " ", html)      # retire les balises HTML
     text = re.sub(r"\s+", " ", text)           # espaces multiples -> un seul
- 
     def find(pattern):
         match = re.search(pattern, text, flags=re.IGNORECASE)
         return match.group(1) if match else None
     result = _empty_statistics()
     result["genome_size"] = _to_int(find(r"Genome size \(bp\)\s*([\d,]+)"))
-    result["gc"] = _to_float(find(r"GC content\s*([\d.]+)\s*%"))
+    result["gc"] = to_number(find(r"GC content\s*([\d.]+)\s*%"))
     result["n_sequences"] = _to_int(find(r"Genome sequence No\.\s*([\d,]+)"))
     result["n50"] = _to_int(find(r"Genome sequence N50 \(bp\)\s*([\d,]+)"))
     result["genes"] = _to_int(find(r"(?:Number of genes|Gene number|Gene No\.)\s*(?:\(\w+\))?\s*([\d,]+)"))
@@ -133,10 +131,9 @@ def fetch_ngdc_statistics(accession):
     return result
  
 
-
 # Ensembl Metazoa
 
-#lecture stats
+ 
 def parse_ensembl_assembly(data):
     lengths = [region["length"] for region in data.get("top_level_region", [])
                if isinstance(region, dict) and region.get("length")]
@@ -155,9 +152,11 @@ def fetch_ensembl_statistics(ensembl_species):
     response.raise_for_status()
     return parse_ensembl_assembly(response.json())
  
+ 
 
+# Point d'entrée unique
 
-
+ 
 def fetch_statistics(source, identifier):
     if source == "NCBI":
         return fetch_ncbi_statistics(identifier)
@@ -166,3 +165,4 @@ def fetch_statistics(source, identifier):
     if source == "ENSEMBL":
         return fetch_ensembl_statistics(identifier)
     raise ValueError(f"Source inconnue : {source}")
+ 
