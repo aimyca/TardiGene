@@ -22,8 +22,7 @@ def get_binary_path(bin_name):
     """
     bin_path = shutil.which(bin_name)
     if bin_path is None:
-        raise Exception as e:
-            print(f"Dependancy not met for {bin_name} or binary not in system PATH.")
+        raise Exception(f"Dependancy not met for {bin_name} or binary not in system PATH.")
     return bin_path
 
 

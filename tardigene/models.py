@@ -25,8 +25,10 @@ WARNING : models.ForeignKey(unique=True) is better handled with models.OneToOneF
 class Record(models.Model):
     """
     Base storage class allowing retrieval in frontend 
+    Should NOT be used when user uploads individual genes/transcripts/proteins.
     """
-    scientific_name = models.CharField(primary_key=True, max_length=255)
+    id = models.IntegerField(primary_key=True) # Needs to be given by the user or generated automatically (a check is required to avoid duplicates)
+    scientific_name = models.CharField(max_length=255)
     name = models.CharField(max_length=255, blank=True) # some species don't have vernacular names
     description = models.TextField(blank=True) # brief description of the organism
     taxonomy = models.CharField(max_length=2048)
@@ -87,4 +89,4 @@ class Gene(models.Model):
     start = models.BigIntegerField(blank=True, null=True)
     end = models.BigIntegerField(blank=True, null=True)
     strand = models.CharField(max_length=255, blank=True, null=True)
-    protein_accession = models.CharField(max_length=63, blank=True, null=True)
+    protein_accession = models.CharField(max_length=63, blank=True, null=True) # if the gene is proteinophoric

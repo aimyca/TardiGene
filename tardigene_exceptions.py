@@ -20,5 +20,8 @@ class FileNotSeenError(TardigeneException):
 class InvalidFormatError(TardigeneException):
     pass
 
+class UnknownFormatError(InvalidFormatError):
+    pass
+
 class MissingDependancyError(TardigeneException):
     pass
