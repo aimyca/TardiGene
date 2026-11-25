@@ -3,9 +3,9 @@ import threading
 from django.db import connection
 from django.db.models import Max
  
-from .models import Assembly, Record
+from ..models import Assembly, Record
  
-from . import web  # recherche dans les bases (web.py de l'équipe)
+import web  # recherche dans les bases (web.py de l'équipe, à la racine du projet)
 from .db_statistics import fetch_statistics
 from .analyse_comparaison_especes import compute_indicators
 from .busco_tools import run_busco
@@ -18,7 +18,7 @@ SOURCE_CODES = {
 }
  
 
-#creation fiche espece 
+#fiche espece (utilisation de cle) 
 def _get_record(species_name):
     species_name = species_name.strip().replace("_", " ")
     record = Record.objects.filter(scientific_name__iexact=species_name).first()
@@ -36,7 +36,7 @@ def _gene_density(genes, genome_size):
     if not genes or not genome_size:
         return None
     return round(genes / (genome_size / 1000000), 1)
- 
+
 
 #recherche espece dans bdd
 def search(species, ngdc_accession=None):
@@ -48,7 +48,7 @@ def search(species, ngdc_accession=None):
         return {"assemblies": [], "errors": {"NGDC-CNCB": str(error)}}
  
  
-#lis caracteristiques d'une especce de la bdd
+#lecture stats assemblage de bdd et enregistrement
 def add_species_from_database(source, identifier, species_name="", assembly_id=""):
     stats = fetch_statistics(source, identifier)
     name = species_name or stats.get("species_name") or identifier
@@ -74,14 +74,13 @@ def add_species_from_database(source, identifier, species_name="", assembly_id="
     return assembly
  
 
-#ajoute assemblage choisi
+#ajout assemblage
 def add_species_from_search(assembly_info):
     source = SOURCE_CODES.get(assembly_info.get("source"), "NCBI")
     if source == "ENSEMBL":
         identifier = (assembly_info.get("extra") or {}).get("ensembl_species") or assembly_info["accession"]
     else:
         identifier = assembly_info["accession"]
- 
     return add_species_from_database(
         source=source,
         identifier=identifier,
@@ -89,14 +88,9 @@ def add_species_from_search(assembly_info):
         assembly_id=assembly_info.get("accession") or "",
     )
  
- 
 
-#calcul stats a partir de bdd (or publiques)
+#calcul stats si pas de bdd publique
 def analyse_uploaded_files(assembly, with_busco=False):
-    """
-    Calcule les statistiques à partir des fichiers d'un biologiste
-    (aucune base publique ne les fournit dans ce cas).
-    """
     assembly.status = "running"
     assembly.error_message = ""
     assembly.save()
@@ -124,7 +118,8 @@ UPLOAD_FIELDS = {
     "protein": "proteins_file",
 }
  
-#calcul des stats apres validation des donnees  
+
+#calcul stats apres validation des donnees 
 def register_uploaded_file(species_name, data_type, file_path, accession="", with_busco=False):
     field = UPLOAD_FIELDS.get(data_type)
     if field is None:
@@ -139,9 +134,9 @@ def register_uploaded_file(species_name, data_type, file_path, accession="", wit
     if assembly.genome_file and assembly.gff_file and assembly.proteins_file:
         run_in_background(refresh_assembly, assembly_id=assembly_id, with_busco=with_busco)
     return assembly
- 
 
-#mise a jour des stats d'assemblage
+
+#relit ou recalcul les données de l'assemblage (maj)
 def refresh_assembly(assembly_id, with_busco=False):
     assembly = Assembly.objects.get(id=assembly_id)
     if assembly.source in ("NCBI", "NGDC", "ENSEMBL"):
@@ -158,15 +153,16 @@ def refresh_assembly(assembly_id, with_busco=False):
             assembly.save()
             return assembly
     return analyse_uploaded_files(assembly, with_busco=with_busco)
- 
-#calcul en arriere plan
+
+
+#calcul en fond quand long
 def run_in_background(function, **kwargs):
     def target():
         try:
             function(**kwargs)
         finally:
             connection.close()  # ferme la connexion à la base ouverte par ce fil
- 
     thread = threading.Thread(target=target, daemon=True)
     thread.start()
     return thread
+ 
