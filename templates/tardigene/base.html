@@ -21,10 +21,10 @@
 
             <!-- Logo -->
             <div class="brand-block">
-                <a href="/" class="brand">
+                <a href="{% url 'home' %}" class="brand" title="TardiGen - Accueil">
                     <img
                         src="{% static 'tardigene/images/logo.png' %}"
-                        alt=""
+                        alt="Logo TardiGen"
                         class="brand-logo"
                     >
 
@@ -41,68 +41,124 @@
             <!-- Navigation -->
             <nav aria-label="Navigation principale">
 
+                <!-- Accueil -->
                 <a href="{% url 'home' %}"
+                   data-tooltip="Accueil"
                    class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/accueil.png' %}"
-                         alt="" class="nav-icon">
-                    Accueil
+
+                    <img
+                        src="{% static 'tardigene/images/accueil.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Accueil</span>
                 </a>
 
+                <!-- Espèces -->
                 <a href="{% url 'species_list' %}"
+                   data-tooltip="Espèces"
                    class="{% if request.resolver_match.url_name == 'species_list' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'species_list' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/especes.png' %}"
-                         alt="" class="nav-icon">
-                    Espèces
+
+                    <img
+                        src="{% static 'tardigene/images/especes.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Espèces</span>
                 </a>
 
+                <!-- Gènes et fonctions -->
                 <a href="{% url 'gene_list' %}"
+                   data-tooltip="Gènes et fonctions"
                    class="{% if request.resolver_match.url_name == 'gene_list' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'gene_list' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/genes.png' %}"
-                         alt="" class="nav-icon">
-                    Gènes et fonctions
+
+                    <img
+                        src="{% static 'tardigene/images/genes.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Gènes et fonctions</span>
                 </a>
 
+                <!-- Comparaison -->
                 <a href="{% url 'comparison' %}"
+                   data-tooltip="Comparaison"
                    class="{% if request.resolver_match.url_name == 'comparison' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'comparison' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/comparaison.png' %}"
-                         alt="" class="nav-icon">
-                    Comparaison
+
+                    <img
+                        src="{% static 'tardigene/images/comparaison.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Comparaison</span>
                 </a>
 
+                <!-- Analyse de séquences -->
                 <a href="{% url 'sequence_analysis' %}"
+                   data-tooltip="Analyse de séquences"
                    class="{% if request.resolver_match.url_name == 'sequence_analysis' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'sequence_analysis' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/analyse.png' %}"
-                         alt="" class="nav-icon">
-                    Analyse de séquences
+
+                    <img
+                        src="{% static 'tardigene/images/analyse.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Analyse de séquences</span>
                 </a>
 
+                <!-- Importation -->
                 <a href="{% url 'import_data' %}"
+                   data-tooltip="Importer des données"
                    class="{% if request.resolver_match.url_name == 'import_data' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'import_data' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/importer.png' %}"
-                         alt="" class="nav-icon">
-                    Importer
+
+                    <img
+                        src="{% static 'tardigene/images/importer.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Importer</span>
                 </a>
 
+                <!-- Historique -->
                 <a href="{% url 'history' %}"
+                   data-tooltip="Historique"
                    class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'history' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/historique.png' %}"
-                         alt="" class="nav-icon">
-                    Historique
+
+                    <img
+                        src="{% static 'tardigene/images/historique.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Historique</span>
                 </a>
 
+                <!-- Aide -->
                 <a href="{% url 'help' %}"
+                   data-tooltip="Aide"
                    class="{% if request.resolver_match.url_name == 'help' %}active{% endif %}"
                    {% if request.resolver_match.url_name == 'help' %}aria-current="page"{% endif %}>
-                    <img src="{% static 'tardigene/images/aide.png' %}"
-                         alt="" class="nav-icon">
-                    Aide
+
+                    <img
+                        src="{% static 'tardigene/images/aide.png' %}"
+                        alt=""
+                        class="nav-icon"
+                    >
+
+                    <span class="nav-label">Aide</span>
                 </a>
 
             </nav>
@@ -138,7 +194,6 @@
 
             </header>
 
-            <!-- Contenu spécifique à chaque page -->
             <main>
                 {% block content %}
                 {% endblock %}
@@ -148,7 +203,6 @@
 
     </div>
 
-    <!-- JavaScript -->
     <script src="{% static 'tardigene/js/main.js' %}"></script>
 
     {% block extra_js %}{% endblock %}

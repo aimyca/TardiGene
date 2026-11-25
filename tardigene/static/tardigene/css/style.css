@@ -313,13 +313,6 @@ aside {
 }
 
 
-.tagline {
-    font-size: 10px;
-    letter-spacing: 2px;
-    padding: 0 12px 34px;
-    color: #bcb2d2;
-}
-
 aside nav {
     display: flex;
     flex-direction: column;
@@ -430,17 +423,41 @@ aside nav a:focus-visible {
     flex-shrink: 0;
 }
 
+.brand-block {
+    width: 100%;
+    min-width: 0;
+    padding-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    text-decoration: none;
+}
+
 .brand-logo {
-    width: 160px;
-    max-width: 100%;
-    height: auto;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
-    display: block;
+    flex-shrink: 0;
 }
 
 .brand a {
     display: inline-block;
     text-decoration: none;
+}
+
+.brand-text {
+    font-size: 25px;
+    font-weight: 800;
+    color: white;
+    white-space: nowrap;
+}
+
+.brand-text span {
+    color: #a98ae9;
 }
 
 /* LOGO ET NOM DE L'APPLICATION */
@@ -471,6 +488,7 @@ aside nav a:focus-visible {
 
 .tagline {
     margin-top: 8px;
+    margin-bottom: 20px;
     padding: 0 12px;
     font-size: 10px;
     letter-spacing: 1.5px;
@@ -934,6 +952,20 @@ dt {
     line-height: 1.6;
 }
 
+/* BOUTON AJOUTER UNE ESPÈCE */
+
+.btn-add-species {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
 
 /* ----------------------------------------------------------
    08. ANALYSE DE SEQUENCES : BLASTN ET MAFFT
@@ -1086,14 +1118,16 @@ dt {
     background: #fff;
     border-radius: 14px;
     margin-top: 14px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 35px;
-    color: #6b47be;
-    cursor: pointer;
+
+    padding: 20px 15px;
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
 .dropzone b {
@@ -1136,6 +1170,7 @@ dt {
     object-fit: contain;
     display: block;
     margin: 0 auto 15px;
+    transform: translateY(10px);
 }
 
 /* ----------------------------------------------------------
@@ -1328,12 +1363,35 @@ dt {
         padding: 25px 8px;
     }
 
-    .brand {
-        font-size: 0;
+
+    .brand-block {
+        width: 100%;
+        margin-bottom: 24px;
     }
 
-    .brand:first-letter {
-        font-size: 24px;
+    .brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        gap: 0;
+    }
+
+    .brand-logo {
+        display: block;
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+
+    .brand-text,
+    .brand-text span {
+        display: none;
+    }
+
+    .tagline {
+        display: none;
     }
 
     .tagline,.aside-foot,aside nav button:not(.active) {
@@ -1388,20 +1446,89 @@ dt {
 
 @media (max-width: 900px) and (min-width: 621px) {
 
-    aside nav a {
+    aside nav a,
+    aside nav a.active {
+        display: flex;
+        align-items: center;
         justify-content: center;
         padding: 14px 8px;
-        font-size: 0;
         gap: 0;
+        font-size: 0;
     }
+
+    aside nav a .nav-label {
+        display: none;
+    }
+
 
     aside nav a .nav-icon {
+        display: block;
         width: 22px;
         height: 22px;
+        object-fit: contain;
+        flex-shrink: 0;
     }
 
+    aside .brand-text,
+    aside .tagline {
+        display: none;
+    }
+
+    aside .brand {
+        justify-content: center;
+        padding: 0;
+    }
+
+    aside .brand-logo {
+        width: 48px;
+        height: 48px;
+    }
 }
 
+
+aside,
+aside nav {
+    overflow: visible;
+}
+
+
+aside nav a {
+    position: relative;
+}
+
+
+aside nav a::after {
+    content: attr(data-tooltip);
+
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 10px);
+    transform: translateY(-50%);
+
+    background: #2b1d46;
+    color: #ffffff;
+
+    padding: 8px 12px;
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1000;
+
+    transition: opacity 0.1s ease;
+}
+
+
+aside nav a:hover::after,
+aside nav a:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+}
 
 @media (max-width: 620px) {
 
