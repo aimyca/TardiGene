@@ -33,19 +33,13 @@ FTP_TIMEOUT = 60
 
 FILE_TYPES = ("fna", "gff", "faa")
 
-ALLOWED_HOSTS = {
-    "ftp.ncbi.nlm.nih.gov",
-    "download.cncb.ac.cn",
-    "ftp.ensemblgenomes.ebi.ac.uk"
-}
-
 MAX_FAILURES_WITHOUT_PROGRESS = 3
 PAUSE_BETWEEN_ATTEMPTS = 5
 
 
 # Fonctions communes
 
-def request_json(url, params=None):
+def _request_json(url, params=None):
     """Effectue une requête API et retourne les données JSON."""
 
     response = requests.get(
@@ -59,7 +53,7 @@ def request_json(url, params=None):
     return response.json()
 
 
-def normalize_assembly(
+def _normalize_assembly(
     source,
     species,
     accession,
@@ -102,7 +96,7 @@ def search_ncbi(species):
         f"{quote(species, safe='')}/dataset_report"
     )
 
-    data = request_json(url)
+    data = _request_json(url)
     results = []
 
     for report in data.get("reports", []):
@@ -120,7 +114,7 @@ def search_ncbi(species):
                     bioproject = projects[0].get("accession")
                     break
 
-        assembly = normalize_assembly(
+        assembly = _normalize_assembly(
             source="NCBI",
             species=organism.get("organism_name", species),
             accession=report.get("accession"),
@@ -137,7 +131,7 @@ def search_ncbi(species):
     return results
 
 
-def ncbi_ftp_path(accession, assembly_name):
+def _ncbi_ftp_path(accession, assembly_name):
     """Construit le chemin FTP d'un assemblage NCBI."""
 
     if not accession or not assembly_name:
@@ -159,12 +153,12 @@ def ncbi_ftp_path(accession, assembly_name):
     )
 
 
-def inspect_ncbi(assembly: dict):
+def _inspect_ncbi(assembly: dict):
     """Inspecte le répertoire FTP NCBI et identifie les fichiers."""
 
     accession = assembly["accession"]
     assembly_name = assembly["assembly_name"]
-    path = ncbi_ftp_path(accession, assembly_name)
+    path = _ncbi_ftp_path(accession, assembly_name)
 
     result = {
         "fna": [],
@@ -272,7 +266,7 @@ def inspect_ncbi(assembly: dict):
 
 # NGDC-CNCB
 
-def search_ngdc(accession):
+def search_ngdc(accession=""):
     """Recherche NGDC à partir d'un identifiant d'assemblage GWH."""
 
     accession = accession.strip()
@@ -281,7 +275,7 @@ def search_ngdc(accession):
         raise ValueError("L'accession GWH est obligatoire.")
 
     url = f"{NGDC_API}/assembly/{quote(accession, safe='')}"
-    data = request_json(url)
+    data = _request_json(url)
 
     files = {
         "fna": [data["ftpPathDna"]] if data.get("ftpPathDna") else [],
@@ -289,7 +283,7 @@ def search_ngdc(accession):
         "faa": [data["ftpPathProtein"]] if data.get("ftpPathProtein") else []
     }
 
-    assembly = normalize_assembly(
+    assembly = _normalize_assembly(
         source="NGDC-CNCB",
         species=data.get("organism"),
         accession=data.get("assemblyAccession"),
@@ -315,7 +309,7 @@ def search_ngdc(accession):
 
 # Ensembl Metazoa
 
-def search_ensembl(species):
+def search_ensembl(species=""):
     """Recherche une espèce dans Ensembl Metazoa."""
 
     species = species.strip()
@@ -323,7 +317,7 @@ def search_ensembl(species):
     if not species:
         raise ValueError("Le nom de l'espèce est obligatoire.")
 
-    data = request_json(
+    data = _request_json(
         f"{ENSEMBL_API}/info/species",
         params={"division": "EnsemblMetazoa"}
     )
@@ -350,13 +344,13 @@ def search_ensembl(species):
     for item in matches:
         name = item.get("name")
 
-        assembly_data = request_json(
+        assembly_data = _request_json(
             f"{ENSEMBL_API}/info/assembly/{quote(name, safe='')}"
         )
 
-        files, file_errors = ensembl_file_urls(name)
+        files, file_errors = _ensembl_file_urls(name)
 
-        assembly = normalize_assembly(
+        assembly = _normalize_assembly(
             source="Ensembl Metazoa",
             species=item.get("display_name", name),
             accession=(
@@ -380,7 +374,7 @@ def search_ensembl(species):
     return results
 
 
-def ensembl_file_urls(species):
+def _ensembl_file_urls(species):
     """Récupère les liens FASTA et GFF3 disponibles sur Ensembl."""
 
     species = quote(species, safe="_")
@@ -480,10 +474,13 @@ def search_external_databases(species, ngdc_accession=None):
 # Inspection des fichiers
 
 def inspect_assembly_files(assembly):
-    """Récupère les fichiers disponibles pour un assemblage."""
+    """Récupère les fichiers disponibles pour un assemblage.
+    
+    THIS FUNCTION IS INCOMPLETE
+    """
 
     if assembly.get("source") == "NCBI":
-        result = inspect_ncbi(assembly)
+        result = _inspect_ncbi(assembly)
 
         assembly["files"] = {
             kind: result.get(kind, [])
@@ -506,10 +503,16 @@ def inspect_assembly_files(assembly):
 
 # Téléchargement avec reprise
 
-def download_file(url, local_path):
+def _download_file(url, local_path):
     """
     Télécharge un fichier avec reprise en cas d'interruption.
     Le fichier temporaire est conservé entre les tentatives.
+
+    EXCLUSIVELY USED DURING DATABASE FILLING & MANAGEMENT
+
+    Notes : 
+        Temporary files are better handled by the `tempfile` module
+        Functions should perform only one type of action, use private functions if needed
     """
 
     if not is_allowed_url(url):
@@ -642,8 +645,11 @@ def download_file(url, local_path):
     )
 
 
-def download_files(assembly, types_to_download, base_folder="data"):
-    """Télécharge les fichiers sélectionnés pour un assemblage."""
+def _download_files(assembly, types_to_download, base_folder="data"):
+    """Télécharge les fichiers sélectionnés pour un assemblage.
+
+    EXCLUSIVELY USED DURING DATABASE FILLING & MANAGEMENT
+    """
 
     for kind in types_to_download:
         if kind not in FILE_TYPES:

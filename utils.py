@@ -11,6 +11,7 @@ import os
 import gzip
 from pathlib import Path # handle Path objects (fasta(.gz))
 from io import TextIOWrapper
+from urllib.parse import urlparse
 
 from Bio import SeqIO
 from tardigene_exceptions import MissingDependancyError, InvalidFormatError
@@ -83,6 +84,11 @@ def is_valid_gzip(filepath):
 def is_allowed_url(url):
     """Vérifie que l'URL utilise HTTPS et un serveur autorisé."""
 
+    ALLOWED_HOSTS = {
+        "ftp.ncbi.nlm.nih.gov",
+        "download.cncb.ac.cn",
+        "ftp.ensemblgenomes.ebi.ac.uk"
+    }
     parsed = urlparse(url)
 
     return (
