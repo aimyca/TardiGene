@@ -27,3 +27,4 @@ class Command(BaseCommand):
             f"densité {show(a.gene_density, ' gènes/Mb')} · BUSCO {show(a.busco, ' %')}"
         ))
  
+#exemple d'entree depuis le terminal : python manage.py add_species NCBI GCA_002082055.1
