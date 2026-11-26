@@ -1,5 +1,3 @@
-from django.db import models
-
 """
 This file contains the relationnal schemas for the database
 Since Tardigrada genomes can weigh up to 80 Gigs, it would be wiser to only store accession ids 
@@ -21,13 +19,15 @@ GTF/GFF parsing : package pyranges
 --- 
 WARNING : models.ForeignKey(unique=True) is better handled with models.OneToOneField()
 """
+from django.db import models
+from django.db.models import F, Q # Constraints 
 
 class Record(models.Model):
     """
     Base storage class allowing retrieval in frontend 
     Should NOT be used when user uploads individual genes/transcripts/proteins.
     """
-    id = models.IntegerField(primary_key=True) # Needs to be given by the user or generated automatically (a check is required to avoid duplicates)
+    # Autoprimary key avoids duplicates
     scientific_name = models.CharField(max_length=255)
     name = models.CharField(max_length=255, blank=True) # some species don't have vernacular names
     description = models.TextField(blank=True) # brief description of the organism
@@ -37,26 +37,33 @@ class Record(models.Model):
     def __str__(self):
         return f"{self.scientific_name} ({self.taxonomy})"
 
+class SequenceRessource(models.Model):
+    """
+    Abstract class shared by Genome and Transcriptome
+    """
+    record = models.OneToOneField(Record, on_delete=models.CASCADE,
+                                  primary_key=True, related_name="%(class)s")
+    name = models.CharField(max_length=255)
+    description = models.TextField() # description of the genome (assembly, raw reads etc)
+    sequence = models.BinaryField(default=b'') # stores gziped genome 
+    accession = models.CharField(max_length=255, blank=True)
+    annotations = models.TextField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
 class Genome(models.Model):
     """
     Stores genomes from various databases
     """
-    id = models.ForeignKey(Record, on_delete=models.CASCADE, related_name="genome_id", primary_key=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField() # description of the genome (assembly, raw reads etc)
-    sequence = models.BinaryField(default=b'') # stores gziped genome 
     is_assembled = models.BooleanField(null=True) # default field value is None
-    annotations = models.TextField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.name}"
 
 class Transcriptome(models.Model):
-    id = models.ForeignKey(Record, on_delete=models.CASCADE, related_name="transcriptome_id", primary_key=True)
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    sequence = models.BinaryField(default=b'') # stores gziped transcriptome 
-    annotations = models.TextField(null=True, blank=True)
+    pass
 
     def __str__(self):
         return f"{self.name}"
@@ -67,26 +74,44 @@ class Assembly(models.Model):
     No delete cascade should be applied as this relation will be used for the history.
     """
     id = models.CharField(max_length=511, primary_key=True)
-    species = models.ForeignKey(Record, on_delete=models.PROTECT)
+    species = models.ForeignKey(Record, on_delete=models.PROTECT, related_name="assemblies")
     classe = models.CharField(max_length=255)
-    genes = models.IntegerField(null=True, blank=True, default="NA")
-    proteins = models.IntegerField(blank=True, default="NA")
-    gc = models.IntegerField(blank=True, default="NA")
-    n50 = models.BigIntegerField(blank=True, default="NA")
-    busco = models.IntegerField(blank=True, default="NA")
+    genes = models.IntegerField(null=True, blank=True)
+    proteins = models.IntegerField(blank=True, null=True)
+    gc = models.FloatField(blank=True, null=True)
+    n50 = models.BigIntegerField(blank=True, null=True)
+    busco = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.id
 
 class Gene(models.Model):
     """
     Table allowing for the storage of genes and genomic regions. Used for ortholog analysis...
     on_delete = PROTECT : since genes can be imported independantly from genomes / transcriptomes.
     """
-    id = models.CharField(primary_key=True, max_length=4095)
-    genome_id = models.ForeignKey(Genome, on_delete=models.PROTECT, blank=True, null=True)
+    class Strand(models.TextChoices): # Enum 
+        PLUS = "+", "Forward"
+        MINUS = "_", "Reverse"
+        UNKNOWN = ".", "Unknown"
+
+
+    gene_id = models.CharField(unique=True, max_length=4095)
+    genome = models.ForeignKey(Genome, on_delete=models.PROTECT, blank=True, null=True)
     transcriptome_id = models.ForeignKey(Transcriptome, models.PROTECT, blank=True, null=True)
     gene_name = models.CharField(max_length=2047)
     # seq_id = models.CharField(max_length=511)
-    seq = models.TextField(default="NA")
+    seq = models.TextField(null=True)
     start = models.BigIntegerField(blank=True, null=True)
     end = models.BigIntegerField(blank=True, null=True)
-    strand = models.CharField(max_length=255, blank=True, null=True)
+    strand = models.CharField(max_length=1, choices=Strand.choices, blank=True, null=True)
     protein_accession = models.CharField(max_length=63, blank=True, null=True) # if the gene is proteinophoric
+
+    class Meta:
+        """Makes sure start <= end"""
+        constraints = [
+            models.CheckConstraint(
+                check=Q(start__isnull=True) | Q(end__isnull=True) | Q(start__lte=F("end")),
+                name="gene_start_lte_end",
+            ),
+        ]

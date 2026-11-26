@@ -28,29 +28,39 @@ def get_binary_path(bin_name):
 
 def isFasta(fn):
     formats = (".fasta", ".fna", ".fa", ".faa")
-    if not fn.endswith(formats):
-        return False
-    with open(fn, "r") as f:
-        first_byte = f.peak(1)
+    name = fn.lower()
+    opener = open
 
-    if not first_byte.startswith(">"):
-        return False
+    if name.endswith(".gz"):
+        opener, name = gzip.open, name[:-3]
 
-    return True
+    if not name.endswith(formats):
+        return False
+    
+    try:
+        with opener(fn, "rb") as f:
+            return f.read(1).lstrip() == b">"
+
+    except os.OSError:
+        return False
 
 def isFastq(fn):
     """
     If file is not in fastq but in a different raw read format, it will need to be converted.
     """
     formats = (".fq", ".fastq")
-    if not fn.endswith(formats):
-        return False
-    with open(fn, "r") as f:
-        first_byte = f.peek(1)
+    name = fn.lower()
+    opener = open
 
-    if not first_byte.startswith("@"):
+    if name.endswith("gzip"):
+        opener, name = gzip.open, name[:-3]
+
+    if not name.endswith(formats):
         return False
     
-    return True
-
+    try:
+        with opener(fn, "r") as f:
+            return f.read(1).lstrip() == b"@"
+    except os.OSError:
+        return False
 

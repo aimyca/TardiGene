@@ -45,7 +45,7 @@ def add_records_from_upload(fn):
     genes = []
     for record in SeqIO.parse(fn, "fasta"):
         genes.append(Gene(
-        id = record.id,
+        gene_id = record.id,
         gene_name = record.name,
         seq = record.seq, 
                      ))
@@ -62,10 +62,13 @@ def add_genes_from_genome(genome_fn):
     if not os.path.isfile(genome_fn):
         raise FileNotSeenError(f"File '{fn}' not seen.")
     
-    if not genome_fn.endswith((".gz", ".gzip")):
-        with open(genome_fn, "rb") as f:
+    if genome_fn.endswith((".gz", ".gzip")): # need to decompress on the go and store content in variable, before that the content needs to be parsed as it is raw (\\n instead of \n)
+        pass
+
+    else:
+        with open(genome_fn, "r") as f:
             data = f.read()
-            comp = gzip.compress(data)
+            pass
     
 
 def add_genes_from_transcriptome(transcriptome):
@@ -86,5 +89,5 @@ def add_transcriptome_to_db(fn):
 
 if __name__ == "__main__":
     fn = "./../../Test_data/Database/Mycoplasma_agalactiae.faa"
-    add_records_from_upload(fn, Format="fasta")
+    add_records_from_upload(fn)
     # add_genes_from_genome()
