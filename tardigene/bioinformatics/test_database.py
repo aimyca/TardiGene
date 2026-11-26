@@ -8,6 +8,8 @@ Require :
     raw reads : fastq 
 """
 
+import unittest
+
 # This is only meant for testing and will not be featured in the final script
 import sys 
 sys.path.insert(1, "../..")
@@ -54,24 +56,30 @@ def add_records_from_upload(fn):
     Gene.objects.bulk_create(genes)
     print(f"Genes in db : {Gene.objects.count()}")
 
-def add_genes_from_genome(genome_fn):
+def add_genome(genome_fn):
     """
-    Genomes must be gzipped before being added to DB.
+    Genomes must be gzipped before being added to DB. 
+    Genomes (from NCBI) contain scaffold sequences. To find genes, it is necessary to run a blast or mafft against a database.
     """
+    name = genome_fn
+    opener = open
+
     # If zipped OR gzipped, open as such, parse 
     if not os.path.isfile(genome_fn):
-        raise FileNotSeenError(f"File '{fn}' not seen.")
-    
-    if genome_fn.endswith((".gz", ".gzip")): # need to decompress on the go and store content in variable, before that the content needs to be parsed as it is raw (\\n instead of \n)
-        pass
+        raise FileNotSeenError(f"File '{genome_fn}' not seen.")
 
-    else:
-        with open(genome_fn, "r") as f:
-            data = f.read()
-            pass
+    if not utils.isFasta(genome_fn):
+        raise InvalidFormatError(f"File {genome_fn} should be a fasta file or a gzipped fasta file ending in '.gz'")
+    
+    if genome_fn.endswith(".gz"): # need to decompress on the go and store content in variable, before that the content needs to be parsed as it is raw (\\n instead of \n) 
+        opener = gzip.open 
+
+    try:
+        with opener(genome_fn, "rb") as f:
+
     
 
-def add_genes_from_transcriptome(transcriptome):
+def add_transcriptome(transcriptome):
     pass
 
 
@@ -87,7 +95,19 @@ def add_transcriptome_to_db(fn):
     pass
 
 
+#########################################################
+# UNIT TEST CLASSES
+#########################################################
+
+def check_db_content(table_name):
+    """
+    Checks if content has been effectively added to database 
+    """
+    assert table_name.objects.count() > 0
+
+
 if __name__ == "__main__":
     fn = "./../../Test_data/Database/Mycoplasma_agalactiae.faa"
-    add_records_from_upload(fn)
-    # add_genes_from_genome()
+    # add_records_from_upload(fn)
+    # check_db_content(Gene)
+

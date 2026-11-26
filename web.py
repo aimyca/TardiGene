@@ -12,6 +12,7 @@ import time
 import requests
 
 from urllib.parse import quote, urljoin, urlparse
+from utils import is_valid_gzip, is_allowed_url
 
 
 # Configuration
@@ -158,7 +159,7 @@ def ncbi_ftp_path(accession, assembly_name):
     )
 
 
-def inspect_ncbi(assembly):
+def inspect_ncbi(assembly: dict):
     """Inspecte le répertoire FTP NCBI et identifie les fichiers."""
 
     accession = assembly["accession"]
@@ -501,33 +502,6 @@ def inspect_assembly_files(assembly):
         }
 
     return assembly
-
-
-# Validation des fichiers et des URL
-
-def is_valid_gzip(filepath):
-    """Vérifie entièrement l'intégrité d'un fichier gzip."""
-
-    try:
-        with gzip.open(filepath, "rb") as handle:
-            while handle.read(1024 * 1024):
-                pass
-
-        return True
-
-    except (OSError, EOFError, gzip.BadGzipFile):
-        return False
-
-
-def is_allowed_url(url):
-    """Vérifie que l'URL utilise HTTPS et un serveur autorisé."""
-
-    parsed = urlparse(url)
-
-    return (
-        parsed.scheme == "https"
-        and parsed.hostname in ALLOWED_HOSTS
-    )
 
 
 # Téléchargement avec reprise

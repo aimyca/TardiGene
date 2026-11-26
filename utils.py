@@ -64,3 +64,33 @@ def isFastq(fn):
     except os.OSError:
         return False
 
+# Validation des fichiers et des URL
+
+def is_valid_gzip(filepath):
+    """Vérifie entièrement l'intégrité d'un fichier gzip."""
+
+    try:
+        with gzip.open(filepath, "rb") as handle:
+            while handle.read(1024 * 1024):
+                pass
+
+        return True
+
+    except (OSError, EOFError, gzip.BadGzipFile):
+        return False
+
+
+def is_allowed_url(url):
+    """Vérifie que l'URL utilise HTTPS et un serveur autorisé."""
+
+    parsed = urlparse(url)
+
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname in ALLOWED_HOSTS
+    )
+
+
+if __name__ == "__main__":
+    # Testing utils 
+    pass
